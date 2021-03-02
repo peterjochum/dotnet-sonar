@@ -4,15 +4,6 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0.102-ca-patch-buster-slim
 LABEL maintainer="NOS Inovação S.A." \
     app_name="dotnet-sonar"
 
-ENV SONAR_SCANNER_MSBUILD_VERSION=5.0.4.24009 \
-    DOTNETCORE_SDK=5.0.102 \
-    DOTNETCORE_RUNTIME=5.0.2 \
-    NETAPP_VERSION=net5.0 \
-    DOCKER_VERSION=5:19.03.13~3-0~debian-buster \
-    CONTAINERD_VERSION=1.3.7-1 \
-    OPENJDK_VERSION=11 \
-    NODEJS_VERSION=15
-
 # Linux update
 RUN apt-get update \
     && apt-get dist-upgrade -y \
@@ -21,7 +12,21 @@ RUN apt-get update \
         ca-certificates \
         curl \
         gnupg-agent \
-        software-properties-common
+        software-properties-common \
+        locales \
+        locales-all
+
+ENV SONAR_SCANNER_MSBUILD_VERSION=5.0.4.24009 \
+    DOTNETCORE_SDK=5.0.102 \
+    DOTNETCORE_RUNTIME=5.0.2 \
+    NETAPP_VERSION=net5.0 \
+    DOCKER_VERSION=5:19.03.13~3-0~debian-buster \
+    CONTAINERD_VERSION=1.3.7-1 \
+    OPENJDK_VERSION=11 \
+    NODEJS_VERSION=15 \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8
 
 RUN mkdir -p /usr/share/man/man1mkdir -p /usr/share/man/man1
 
@@ -57,3 +62,5 @@ RUN apt-get install -y unzip \
 RUN apt-get -q autoremove \
     && apt-get -q clean -y \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*.bin
+    
+
